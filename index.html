@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Joseph | Engineering Portfolio</title>
+  <style>
+    :root{
+      --bg:#0b0e14; --card:#111827; --muted:#9aa4b2; --fg:#e5e7eb;
+      --border:#223047; --accent:#7dd3fc; --ok:#86efac; --warn:#fde68a;
+      --bad:#fca5a5; --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f7fafc; --card:#ffffff; --fg:#0b1220; --muted:#55657a; --border:#d7e0ea; --accent:#0369a1; }
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--fg);line-height:1.4}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{position:sticky;top:0;background:linear-gradient(to bottom, rgba(0,0,0,.55), rgba(0,0,0,0));backdrop-filter: blur(10px);border-bottom:1px solid rgba(255,255,255,.06);z-index:10}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .name{display:flex;flex-direction:column;gap:4px}
+    .name h1{margin:0;font-size:20px}
+    .name .sub{color:var(--muted);font-size:13px}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .pill{border:1px solid var(--border);background:rgba(255,255,255,.03);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    button{
+      background:rgba(255,255,255,.06); color:var(--fg); border:1px solid var(--border);
+      padding:8px 12px; border-radius:10px; cursor:pointer; font-size:13px;
+    }
+    button:hover{background:rgba(255,255,255,.10)}
+    main{padding:18px 0}
+    .grid{display:grid;grid-template-columns: 1.2fr .8fr;gap:14px}
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
+    .card h2{margin:0 0 10px 0;font-size:15px}
+    .card h3{margin:14px 0 8px 0;font-size:14px;color:var(--fg)}
+    .muted{color:var(--muted)}
+    .mono{font-family:var(--mono)}
+    .kpi{display:grid;grid-template-columns: repeat(3,1fr);gap:10px}
+    @media (max-width: 550px){ .kpi{grid-template-columns:1fr} }
+    .kpi .box{border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(255,255,255,.02)}
+    .kpi .box .v{font-size:16px}
+    .kpi .box .l{font-size:12px;color:var(--muted)}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .item{border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(255,255,255,.02)}
+    .item .t{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+    .item .t b{font-size:13px}
+    .tagrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+    .tag{font-size:11px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;color:var(--muted)}
+    .impact{margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    @media (max-width: 650px){ .impact{grid-template-columns:1fr} }
+    .impact span{font-size:12px;border:1px dashed rgba(255,255,255,.18);border-radius:12px;padding:6px 8px;color:var(--muted)}
+    .bar{height:8px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid var(--border)}
+    .bar > i{display:block;height:100%;background:var(--accent);width:0%}
+    .skill{display:grid;grid-template-columns: 140px 1fr 60px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .skill:last-child{border-bottom:none}
+    .rightcol{display:flex;flex-direction:column;gap:14px}
+    .footer{color:var(--muted);font-size:12px;padding:18px 0}
+    textarea,input{
+      width:100%; background:rgba(0,0,0,.12); color:var(--fg);
+      border:1px solid var(--border); border-radius:12px; padding:10px; font-family:var(--sans);
+    }
+    .row{display:grid;grid-template-columns: 1fr 1fr; gap:10px}
+    @media (max-width: 700px){ .row{grid-template-columns:1fr} }
+    .small{font-size:12px}
+    .badge{font-size:11px;border-radius:999px;padding:3px 8px;border:1px solid var(--border);color:var(--muted)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+    .hidden{display:none}
+    .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <div class="name">
+      <h1 id="h_name">Joseph</h1>
+      <div class="sub" id="h_sub">Senior Software Developer | Embedded, Drivers, .NET, Security</div>
+      <div class="pillrow" id="h_pills"></div>
+    </div>
+    <div class="pillrow">
+      <a class="pill" id="lnk_email" href="#">email</a>
+      <a class="pill" id="lnk_github" href="#" target="_blank" rel="noreferrer">code</a>
+      <a class="pill" id="lnk_linkedin" href="#" target="_blank" rel="noreferrer">networking</a>
+      <button id="btn_edit">Edit</button>
+      <button id="btn_export">Export JSON</button>
+      <button id="btn_reset">Reset</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <section class="card">
+      <h2>Snapshot</h2>
+      <p class="muted" id="about"></p>
+
+      <div class="kpi" id="kpis"></div>
+
+      <h3>Recently shipped (keep this alive)</h3>
+      <div class="list" id="recent"></div>
+
+      <h3>Projects with receipts</h3>
+      <div class="list" id="projects"></div>
+    </section>
+
+    <aside class="rightcol">
+      <section class="card">
+        <h2>Skills matrix</h2>
+        <div id="skills"></div>
+        <div class="small muted" style="margin-top:10px">
+          Levels: 1 = “I’ve seen it”, 3 = “I can own it”, 5 = “please stop asking me to fix everyone’s build”.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Focus areas</h2>
+        <div class="list" id="focus"></div>
+      </section>
+
+      <section class="card" id="edit_panel" class="hidden">
+        <h2>Edit mode <span class="badge warn">local only</span></h2>
+        <p class="small muted">Edits are saved to <span class="mono">localStorage</span> on this device. If you want changes public, export JSON and paste it into the page source (instructions below).</p>
+
+        <div class="row">
+          <div>
+            <label class="small muted">Name</label>
+            <input id="e_name" />
+          </div>
+          <div>
+            <label class="small muted">Subtitle</label>
+            <input id="e_sub" />
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="small muted">About (2–4 sentences, impact-driven)</label>
+          <textarea id="e_about" rows="5"></textarea>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label class="small muted">Email</label>
+            <input id="e_email" />
+          </div>
+          <div>
+            <label class="small muted">GitHub (or repo link)</label>
+            <input id="e_github" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div>
+            <label class="small muted">LinkedIn</label>
+            <input id="e_linkedin" />
+          </div>
+          <div>
+            <label class="small muted">Header pills (comma separated)</label>
+            <input id="e_pills" />
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="small muted">Data JSON (advanced)</label>
+          <textarea id="e_json" rows="10" class="mono"></textarea>
+        </div>
+
+        <div class="tools">
+          <button id="btn_save">Save</button>
+          <button id="btn_close">Close</button>
+        </div>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0">
+        <div class="small muted">
+          <b>Make it public:</b> click “Export JSON”, then replace the <span class="mono">DEFAULT_DATA</span> object in the source with your exported JSON. Commit. Done.
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <div class="footer">
+    Built to be updated in 2 minutes, not worshipped once per year.
+  </div>
+</main>
+
+<script>
+  const DEFAULT_DATA = {
+    meta: {
+      name: "Joseph",
+      subtitle: "Senior Software Developer | Embedded, Drivers, .NET, Security",
+      pills: ["C/C++", ".NET 8", "Linux containers", "Drivers", "Security"],
+      email: "mailto:your@email.com",
+      github: "https://github.com/your-handle",
+      linkedin: "https://www.linkedin.com/in/your-handle",
+      about:
+        "I build performance-critical software across embedded and cloud: drivers, SDKs, and service integrations. " +
+        "I like measurable results: lower latency, fewer incidents, smaller memory footprints, and systems that don’t wake you at 3am. " +
+        "If something is slow, I profile it. If something is vague, I model it.",
+      kpis: [
+        { value: "120+", label: "dives (because humans are complicated)" },
+        { value: "10+ yrs", label: "systems/embedded experience" },
+        { value: "Now", label: "shipping .NET + integrations" }
+      ]
+    },
+    recent: [
+      { title: "SVN integration over HTTP (Linux containers)", when: "2025", note: "Mapped SVN data to Git-like interfaces; minimized round-trips." },
+      { title: "Driver-level thinking applied to backend reliability", when: "2025", note: "Made failures observable; reduced “unknown unknowns”." }
+    ],
+    projects: [
+      {
+        name: "Multi-provider SCM integrations",
+        when: "2024–2025",
+        what: "GitHub/GitLab/Bitbucket/SVN style connectors for scanning pipelines.",
+        impact: { latency: "-35% API calls", memory: "-25% peak RAM", reliability: "fewer timeouts" },
+        tags: ["C#", ".NET", "HTTP", "Containers", "Resilience"],
+        links: [{ label: "Design notes", url: "#" }]
+      },
+      {
+        name: "Performance-first audio tooling (MusicGPT)",
+        when: "R&D",
+        what: "Real-time audio event detection pipeline, C++ for hot paths, IPC via ZeroMQ/gRPC.",
+        impact: { latency: "<10ms target", cpu: "hot loops in C++", reliability: "backpressure aware" },
+        tags: ["C++", "DSP", "ZeroMQ", "gRPC"],
+        links: [{ label: "Repo", url: "#" }]
+      }
+    ],
+    skills: [
+      { name: "ANSI C / C++", level: 5 },
+      { name: "Performance profiling", level: 5 },
+      { name: "Drivers / low-level", level: 4 },
+      { name: ".NET / C#", level: 4 },
+      { name: "Linux + containers", level: 4 },
+      { name: "TypeScript", level: 2 },
+      { name: "Rust", level: 2 }
+    ],
+    focus: [
+      { title: "What I optimize", note: "Latency, memory, IO, failure modes, and the number of moving parts." },
+      { title: "What I won’t do", note: "Pretend a slow system is “fine” because it passed one happy-path test." },
+      { title: "What I’m exploring", note: "Hardware-first tooling, observability, and boring reliability that scales." }
+    ]
+  };
+
+  const STORAGE_KEY = "cv_portfolio_data_v1";
+
+  function loadData(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return structuredClone(DEFAULT_DATA);
+      return JSON.parse(raw);
+    }catch{
+      return structuredClone(DEFAULT_DATA);
+    }
+  }
+  function saveData(d){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function setBar(el, level){
+    const pct = Math.max(0, Math.min(5, level)) * 20;
+    el.querySelector("i").style.width = pct + "%";
+  }
+
+  function render(d){
+    document.title = (d.meta?.name || "Portfolio") + " | Engineering Portfolio";
+    document.getElementById("h_name").textContent = d.meta.name || "";
+    document.getElementById("h_sub").textContent = d.meta.subtitle || "";
+    document.getElementById("about").textContent = d.meta.about || "";
+
+    const pills = document.getElementById("h_pills");
+    pills.innerHTML = "";
+    (d.meta.pills || []).forEach(p => {
+      const span = document.createElement("span");
+      span.className = "pill";
+      span.textContent = p;
+      pills.appendChild(span);
+    });
+
+    const email = document.getElementById("lnk_email");
+    email.href = d.meta.email || "#";
+    email.textContent = (d.meta.email || "email").replace("mailto:","");
+
+    const gh = document.getElementById("lnk_github");
+    gh.href = d.meta.github || "#";
+
+    const li = document.getElementById("lnk_linkedin");
+    li.href = d.meta.linkedin || "#";
+
+    const kpis = document.getElementById("kpis");
+    kpis.innerHTML = "";
+    (d.meta.kpis || []).forEach(k => {
+      const div = document.createElement("div");
+      div.className = "box";
+      div.innerHTML = `<div class="v">${escapeHtml(k.value||"")}</div><div class="l">${escapeHtml(k.label||"")}</div>`;
+      kpis.appendChild(div);
+    });
+
+    const recent = document.getElementById("recent");
+    recent.innerHTML = "";
+    (d.recent || []).forEach(r => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <div class="t"><b>${escapeHtml(r.title||"")}</b><span class="muted small">${escapeHtml(r.when||"")}</span></div>
+        <div class="small muted">${escapeHtml(r.note||"")}</div>
+      `;
+      recent.appendChild(div);
+    });
+
+    const projects = document.getElementById("projects");
+    projects.innerHTML = "";
+    (d.projects || []).forEach(p => {
+      const div = document.createElement("div");
+      div.className = "item";
+      const impact = p.impact || {};
+      const impactBits = Object.entries(impact).slice(0,6).map(([k,v]) => `<span><b>${escapeHtml(k)}:</b> ${escapeHtml(v)}</span>`).join("");
+      const tags = (p.tags||[]).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
+      const links = (p.links||[]).map(l => `<a class="tag" href="${escapeHtml(l.url||"#")}" target="_blank" rel="noreferrer">${escapeHtml(l.label||"link")}</a>`).join("");
+      div.innerHTML = `
+        <div class="t">
+          <b>${escapeHtml(p.name||"")}</b>
+          <span class="muted small">${escapeHtml(p.when||"")}</span>
+        </div>
+        <div class="small muted">${escapeHtml(p.what||"")}</div>
+        <div class="impact">${impactBits}</div>
+        <div class="tagrow">${tags}${links}</div>
+      `;
+      projects.appendChild(div);
+    });
+
+    const skills = document.getElementById("skills");
+    skills.innerHTML = "";
+    (d.skills || []).forEach(s => {
+      const row = document.createElement("div");
+      row.className = "skill";
+      row.innerHTML = `
+        <div class="small">${escapeHtml(s.name||"")}</div>
+        <div class="bar"><i></i></div>
+        <div class="small muted mono">${escapeHtml(String(s.level ?? ""))}/5</div>
+      `;
+      setBar(row.querySelector(".bar"), s.level || 0);
+      skills.appendChild(row);
+    });
+
+    const focus = document.getElementById("focus");
+    focus.innerHTML = "";
+    (d.focus || []).forEach(f => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `<div class="t"><b>${escapeHtml(f.title||"")}</b></div><div class="small muted">${escapeHtml(f.note||"")}</div>`;
+      focus.appendChild(div);
+    });
+  }
+
+  let data = loadData();
+  render(data);
+
+  const panel = document.getElementById("edit_panel");
+  const btnEdit = document.getElementById("btn_edit");
+  const btnExport = document.getElementById("btn_export");
+  const btnReset = document.getElementById("btn_reset");
+
+  const e_name = document.getElementById("e_name");
+  const e_sub = document.getElementById("e_sub");
+  const e_about = document.getElementById("e_about");
+  const e_email = document.getElementById("e_email");
+  const e_github = document.getElementById("e_github");
+  const e_linkedin = document.getElementById("e_linkedin");
+  const e_pills = document.getElementById("e_pills");
+  const e_json = document.getElementById("e_json");
+
+  function openEditor(){
+    panel.classList.remove("hidden");
+    e_name.value = data.meta.name || "";
+    e_sub.value = data.meta.subtitle || "";
+    e_about.value = data.meta.about || "";
+    e_email.value = data.meta.email || "";
+    e_github.value = data.meta.github || "";
+    e_linkedin.value = data.meta.linkedin || "";
+    e_pills.value = (data.meta.pills || []).join(", ");
+    e_json.value = JSON.stringify(data, null, 2);
+  }
+  function closeEditor(){
+    panel.classList.add("hidden");
+  }
+
+  btnEdit.addEventListener("click", () => {
+    if(panel.classList.contains("hidden")) openEditor();
+    else closeEditor();
+  });
+
+  document.getElementById("btn_close").addEventListener("click", closeEditor);
+
+  document.getElementById("btn_save").addEventListener("click", () => {
+    // basic fields
+    data.meta.name = e_name.value.trim();
+    data.meta.subtitle = e_sub.value.trim();
+    data.meta.about = e_about.value.trim();
+    data.meta.email = e_email.value.trim();
+    data.meta.github = e_github.value.trim();
+    data.meta.linkedin = e_linkedin.value.trim();
+    data.meta.pills = e_pills.value.split(",").map(x => x.trim()).filter(Boolean);
+
+    // JSON override if user edited it
+    try{
+      const parsed = JSON.parse(e_json.value);
+      data = parsed;
+    }catch{
+      // keep field edits, ignore JSON errors
+    }
+
+    saveData(data);
+    render(data);
+    openEditor(); // refresh editor fields/json view
+  });
+
+  btnExport.addEventListener("click", async () => {
+    const json = JSON.stringify(data, null, 2);
+    try{
+      await navigator.clipboard.writeText(json);
+      btnExport.textContent = "Copied JSON";
+      setTimeout(()=>btnExport.textContent="Export JSON", 1200);
+    }catch{
+      // fallback: show editor and put json in textarea
+      openEditor();
+      e_json.value = json;
+      btnExport.textContent = "Exported";
+      setTimeout(()=>btnExport.textContent="Export JSON", 1200);
+    }
+  });
+
+  btnReset.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    data = structuredClone(DEFAULT_DATA);
+    render(data);
+    if(!panel.classList.contains("hidden")) openEditor();
+  });
+</script>
+</body>
+</html>
