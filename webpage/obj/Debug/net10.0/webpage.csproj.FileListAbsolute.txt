@@ -207,9 +207,6 @@ E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\dotnet.runtime.js
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\icudt_CJK.tjcz0u77k5.dat
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\icudt_EFIGS.tptq2av103.dat
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\icudt_no_CJK.lfu7j35m59.dat
-E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.iv0wf9fcda.wasm
-E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.qxgcilwg1b.pdb
-E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\dotnet.sm7wwzu6cx.js
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\blazor.webassembly.66stpp682q.js.gz
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\Microsoft.AspNetCore.Authorization.mrojqw2yhh.wasm.gz
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\Microsoft.AspNetCore.Components.5yorhp2rya.wasm.gz
@@ -418,9 +415,6 @@ E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\dotnet.runtime.js
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\icudt_CJK.tjcz0u77k5.dat.gz
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\icudt_EFIGS.tptq2av103.dat.gz
 E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\icudt_no_CJK.lfu7j35m59.dat.gz
-E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.iv0wf9fcda.wasm.gz
-E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.qxgcilwg1b.pdb.gz
-E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\dotnet.sm7wwzu6cx.js.gz
 E:\github\webpage\webpage\bin\Debug\net10.0\webpage.staticwebassets.runtime.json
 E:\github\webpage\webpage\bin\Debug\net10.0\webpage.staticwebassets.endpoints.json
 E:\github\webpage\webpage\bin\Debug\net10.0\webpage.dll
@@ -1111,10 +1105,6 @@ E:\github\webpage\webpage\obj\Debug\net10.0\compressed\1ubcqxyceq-{0}-efgkpxn596
 E:\github\webpage\webpage\obj\Debug\net10.0\compressed\jw6t0rkmtc-{0}-tjcz0u77k5-tjcz0u77k5.gz
 E:\github\webpage\webpage\obj\Debug\net10.0\compressed\e3ldq1bhr0-{0}-tptq2av103-tptq2av103.gz
 E:\github\webpage\webpage\obj\Debug\net10.0\compressed\td8vp6axcj-{0}-lfu7j35m59-lfu7j35m59.gz
-E:\github\webpage\webpage\obj\Debug\net10.0\compressed\95p6huvcey-{0}-iv0wf9fcda-iv0wf9fcda.gz
-E:\github\webpage\webpage\obj\Debug\net10.0\compressed\u6360dkzar-{0}-qxgcilwg1b-qxgcilwg1b.gz
-E:\github\webpage\webpage\obj\Debug\net10.0\compressed\29sqzesb8v-{0}-sm7wwzu6cx-sm7wwzu6cx.gz
-E:\github\webpage\webpage\obj\Debug\net10.0\compressed\espysl6g4f-{0}-0sp534o8kq-0sp534o8kq.gz
 E:\github\webpage\webpage\obj\Debug\net10.0\staticwebassets.build.json
 E:\github\webpage\webpage\obj\Debug\net10.0\staticwebassets.build.json.cache
 E:\github\webpage\webpage\obj\Debug\net10.0\staticwebassets.development.json
@@ -1125,3 +1115,14 @@ E:\github\webpage\webpage\obj\Debug\net10.0\webpage.dll
 E:\github\webpage\webpage\obj\Debug\net10.0\refint\webpage.dll
 E:\github\webpage\webpage\obj\Debug\net10.0\webpage.pdb
 E:\github\webpage\webpage\obj\Debug\net10.0\ref\webpage.dll
+E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.fc14364fnd.wasm
+E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.439wzsqn90.pdb
+E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\dotnet.bk78fbhaxn.js
+E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.fc14364fnd.wasm.gz
+E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\webpage.439wzsqn90.pdb.gz
+E:\github\webpage\webpage\bin\Debug\net10.0\wwwroot\_framework\dotnet.bk78fbhaxn.js.gz
+E:\github\webpage\webpage\obj\Debug\net10.0\compressed\fru4cb92rm-{0}-1i59u53iqq-1i59u53iqq.gz
+E:\github\webpage\webpage\obj\Debug\net10.0\compressed\95p6huvcey-{0}-fc14364fnd-fc14364fnd.gz
+E:\github\webpage\webpage\obj\Debug\net10.0\compressed\u6360dkzar-{0}-439wzsqn90-439wzsqn90.gz
+E:\github\webpage\webpage\obj\Debug\net10.0\compressed\29sqzesb8v-{0}-bk78fbhaxn-bk78fbhaxn.gz
+E:\github\webpage\webpage\obj\Debug\net10.0\compressed\espysl6g4f-{0}-ywflf4o7rk-ywflf4o7rk.gz

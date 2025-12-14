@@ -1,7 +1,335 @@
 ﻿@page "/"
+@using webpage.Models
+@using System.Text.Json
+@inject IJSRuntime JS
 
-<PageTitle>Home</PageTitle>
+@if (Data == null)
+{
+    // Initial loading or error state
+    <div class="wrap">Loading...</div>
+}
+else
+{
+    @* --- HEADER (Sticky) --- *@
+    <header>
+        <div class="wrap top">
+            <div class="name">
+                <h1 id="h_name">@Data.Meta.Name</h1>
+                <div class="sub" id="h_sub">@Data.Meta.Subtitle</div>
+                <div class="pillrow" id="h_pills">
+                    @foreach (var pill in Data.Meta.Pills)
+                    {
+                        <span class="pill">@pill</span>
+                    }
+                </div>
+            </div>
+            <div class="pillrow">
+                <a class="pill" id="lnk_email" href="@Data.Meta.Email">@Data.Meta.Email.Replace("mailto:", "")</a>
+                <a class="pill" id="lnk_github" href="@Data.Meta.Github" target="_blank" rel="noreferrer">code</a>
+                <a class="pill" id="lnk_linkedin" href="@Data.Meta.Linkedin" target="_blank" rel="noreferrer">networking</a>
+                <button id="btn_edit" @onclick="ToggleEditor">Edit</button>
+                <button id="btn_export" @onclick="ExportJson">@ExportButtonText</button>
+                <button id="btn_reset" @onclick="ResetData">Reset</button>
+            </div>
+        </div>
+    </header>
 
-<h1>Hello, world!</h1>
+    @* --- MAIN CONTENT --- *@
+    <div class="wrap">
+        <div class="grid">
+            @* --- LEFT COLUMN --- *@
+            <section class="card">
+                <h2>Snapshot</h2>
+                <p class="muted" id="about">@Data.Meta.About</p>
 
-Welcome to your new app.
+                <div class="kpi" id="kpis">
+                    @foreach (var k in Data.Meta.Kpis)
+                    {
+                        <div class="box">
+                            <div class="v">@k.Value</div>
+                            <div class="l">@k.Label</div>
+                        </div>
+                    }
+                </div>
+
+                <h3>Recently shipped (keep this alive)</h3>
+                <div class="list" id="recent">
+                    @foreach (var r in Data.Recent)
+                    {
+                        <div class="item">
+                            <div class="t"><b>@r.Title</b><span class="muted small">@r.When</span></div>
+                            <div class="small muted">@r.Note</div>
+                        </div>
+                    }
+                </div>
+
+                <h3>Projects with receipts</h3>
+                <div class="list" id="projects">
+                    @foreach (var p in Data.Projects)
+                    {
+                        <div class="item">
+                            <div class="t">
+                                <b>@p.Name</b>
+                                <span class="muted small">@p.When</span>
+                            </div>
+                            <div class="small muted">@p.What</div>
+                            <div class="impact">
+                                @foreach (var imp in p.Impact.Take(6))
+                                {
+                                    <span><b>@imp.Key:</b> @imp.Value</span>
+                                }
+                            </div>
+                            <div class="tagrow">
+                                @foreach (var t in p.Tags)
+                                {
+                                    <span class="tag">@t</span>
+                                }
+                                @foreach (var l in p.Links)
+                                {
+                                    <a class="tag" href="@l.Url" target="_blank" rel="noreferrer">@l.Label</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+
+            @* --- RIGHT COLUMN --- *@
+            <aside class="rightcol">
+                <section class="card">
+                    <h2>Skills matrix</h2>
+                    <div id="skills">
+                        @foreach (var s in Data.Skills)
+                        {
+                            <div class="skill">
+                                <div class="small">@s.Name</div>
+                                <div class="bar">
+                                    <i style="width:@(Math.Max(0, Math.Min(5, s.Level)) * 20)%"></i>
+                                </div>
+                                <div class="small muted mono">@s.Level/5</div>
+                            </div>
+                        }
+                    </div>
+                    <div class="small muted" style="margin-top:10px">
+                        Levels: 1 = “I’ve seen it”, 3 = “I can own it”, 5 = “please stop asking me to fix everyone’s build”.
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>Focus areas</h2>
+                    <div class="list" id="focus">
+                        @foreach (var f in Data.Focus)
+                        {
+                            <div class="item">
+                                <div class="t"><b>@f.Title</b></div>
+                                <div class="small muted">@f.Note</div>
+                            </div>
+                        }
+                    </div>
+                </section>
+
+                @* --- EDIT PANEL --- *@
+                <section class="card @(IsEditorOpen ? "" : "hidden")" id="edit_panel">
+                    <h2>Edit mode <span class="badge warn">local only</span></h2>
+                    <p class="small muted">Edits are saved to <span class="mono">localStorage</span> on this device. If you
+                        want changes public, export JSON and paste it into the page source.</p>
+
+                    <div class="row">
+                        <div>
+                            <label class="small muted">Name</label>
+                            <input @bind="Data.Meta.Name" />
+                        </div>
+                        <div>
+                            <label class="small muted">Subtitle</label>
+                            <input @bind="Data.Meta.Subtitle" />
+                        </div>
+                    </div>
+
+                    <div style="margin-top:10px">
+                        <label class="small muted">About</label>
+                        <textarea @bind="Data.Meta.About" rows="5"></textarea>
+                    </div>
+
+                    <div class="row" style="margin-top:10px">
+                        <div>
+                            <label class="small muted">Email</label>
+                            <input @bind="Data.Meta.Email" />
+                        </div>
+                        <div>
+                            <label class="small muted">GitHub</label>
+                            <input @bind="Data.Meta.Github" />
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:10px">
+                        <div>
+                            <label class="small muted">LinkedIn</label>
+                            <input @bind="Data.Meta.Linkedin" />
+                        </div>
+                        <div>
+                            <label class="small muted">Header Pills (comma separated)</label>
+                            <input value="@string.Join(", ", Data.Meta.Pills)" @onchange="UpdatePills" />
+                        </div>
+                    </div>
+
+                    <div class="tools">
+                        <button id="btn_save" @onclick="SaveData">Save</button>
+                        <button id="btn_close" @onclick="ToggleEditor">Close</button>
+                    </div>
+                </section>
+            </aside>
+        </div>
+
+        <div class="footer">
+            Built to be updated in 2 minutes, not worshipped once per year.
+        </div>
+    </div>
+}
+
+@code {
+#nullable enable
+    private PortfolioData? Data;
+    private bool IsEditorOpen = false;
+    private string ExportButtonText = "Export JSON";
+    private const string STORAGE_KEY = "cv_portfolio_data_v1";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        var json = await JS.InvokeAsync<string>("localStorage.getItem", STORAGE_KEY);
+        if (!string.IsNullOrEmpty(json))
+        {
+            try
+            {
+                Data = JsonSerializer.Deserialize<PortfolioData>(json);
+            }
+            catch
+            {
+                Data = GetDefaultData();
+            }
+        }
+        else
+        {
+            Data = GetDefaultData();
+        }
+    }
+
+    private async Task SaveData()
+    {
+        if (Data != null)
+        {
+            var json = JsonSerializer.Serialize(Data);
+            await JS.InvokeVoidAsync("localStorage.setItem", STORAGE_KEY, json);
+            // Optionally force re-render if needed, but @bind handles most
+        }
+    }
+
+    private void ToggleEditor()
+    {
+        IsEditorOpen = !IsEditorOpen;
+    }
+
+    private async Task ResetData()
+    {
+        await JS.InvokeVoidAsync("localStorage.removeItem", STORAGE_KEY);
+        Data = GetDefaultData();
+    }
+
+    private async Task ExportJson()
+    {
+        if (Data == null) return;
+        var json = JsonSerializer.Serialize(Data, new JsonSerializerOptions { WriteIndented = true });
+        try
+        {
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", json);
+            ExportButtonText = "Copied JSON";
+            StateHasChanged();
+            await Task.Delay(1200);
+            ExportButtonText = "Export JSON";
+            StateHasChanged();
+        }
+        catch
+        {
+            // Fallback if needed
+        }
+    }
+
+    private void UpdatePills(ChangeEventArgs e)
+    {
+        if (Data != null && e.Value is string s)
+        {
+            Data.Meta.Pills = s.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+        }
+    }
+
+    private PortfolioData GetDefaultData()
+    {
+        return new PortfolioData
+        {
+            Meta = new Meta
+            {
+                Name = "Joseph",
+                Subtitle = "Senior Software Developer | Embedded, Drivers, .NET, Security",
+                Pills = new List<string> { "C/C++", ".NET 8", "Linux containers", "Drivers", "Security" },
+                Email = "mailto:your@email.com",
+                Github = "https://github.com/your-handle",
+                Linkedin = "https://www.linkedin.com/in/your-handle",
+                About = "I build performance-critical software across embedded and cloud: drivers, SDKs, and service integrations. I like measurable results: lower latency, fewer incidents, smaller memory footprints, and systems that don’t wake you at 3am. If something is slow, I profile it. If something is vague, I model it.",
+                Kpis = new List<Kpi>
+{
+new Kpi { Value = "120+", Label = "dives (because humans are complicated)" },
+new Kpi { Value = "10+ yrs", Label = "systems/embedded experience" },
+new Kpi { Value = "Now", Label = "shipping .NET + integrations" }
+}
+            },
+            Recent = new List<RecentItem>
+{
+new RecentItem { Title = "SVN integration over HTTP (Linux containers)", When = "2025", Note = "Mapped SVN data to Git-like interfaces; minimized round-trips." },
+new RecentItem { Title = "Driver-level thinking applied to backend reliability", When = "2025", Note = "Made failures observable; reduced “unknown unknowns”." }
+},
+            Projects = new List<Project>
+{
+new Project
+{
+Name = "Multi-provider SCM integrations",
+When = "2024–2025",
+What = "GitHub/GitLab/Bitbucket/SVN style connectors for scanning pipelines.",
+Impact = new Dictionary<string, string> { { "latency", "-35% API calls" }, { "memory", "-25% peak RAM" }, {
+"reliability", "fewer timeouts" } },
+Tags = new List<string> { "C#", ".NET", "HTTP", "Containers", "Resilience" },
+Links = new List<Link> { new Link { Label = "Design notes", Url = "#" } }
+},
+new Project
+{
+Name = "Performance-first audio tooling (MusicGPT)",
+When = "R&D",
+What = "Real-time audio event detection pipeline, C++ for hot paths, IPC via ZeroMQ/gRPC.",
+Impact = new Dictionary<string, string> { { "latency", "<10ms target" }, { "cpu", "hot loops in C++" }, { "reliability",
+"backpressure aware" } },
+Tags = new List<string> { "C++", "DSP", "ZeroMQ", "gRPC" },
+Links = new List<Link> { new Link { Label = "Repo", Url = "#" } }
+}
+},
+            Skills = new List<Skill>
+{
+new Skill { Name = "ANSI C / C++", Level = 5 },
+new Skill { Name = "Performance profiling", Level = 5 },
+new Skill { Name = "Drivers / low-level", Level = 4 },
+new Skill { Name = ".NET / C#", Level = 4 },
+new Skill { Name = "Linux + containers", Level = 4 },
+new Skill { Name = "TypeScript", Level = 2 },
+new Skill { Name = "Rust", Level = 2 }
+},
+            Focus = new List<FocusItem>
+{
+new FocusItem { Title = "What I optimize", Note = "Latency, memory, IO, failure modes, and the number of moving parts." },
+new FocusItem { Title = "What I won’t do", Note = "Pretend a slow system is “fine” because it passed one happy-path test." },
+new FocusItem { Title = "What I’m exploring", Note = "Hardware-first tooling, observability, and boring reliability that scales." }
+}
+        };
+    }
+}
